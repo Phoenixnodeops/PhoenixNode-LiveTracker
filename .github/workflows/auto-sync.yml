@@ -2,24 +2,26 @@ name: 🔁 Auto Sync to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   schedule:
-    - cron: "*/15 * * * *"  # Every 15 minutes
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: .  # This uploads your entire repo contents
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+      - name: 🔄 Commit & Push any changes
+        run: |
+          git config user.name "PhoenixNode AutoSync"
+          git config user.email "autosync@phoenixnode.ai"
+          git add .
+          git commit -m "🔁 Auto-updated content" || echo "No changes to commit"
+          git push origin main
