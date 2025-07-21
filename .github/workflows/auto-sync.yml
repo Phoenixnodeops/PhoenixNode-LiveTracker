@@ -1,25 +1,27 @@
-name: 🔁 Auto Sync to GitHub Pages
+name: 🧠 Auto Sync to GitHub Pages
 
 on:
+  schedule:
+    - cron: '*/15 * * * *'  # every 15 minutes
   push:
     branches:
       - main
-  schedule:
-    - cron: "*/15 * * * *"  # Every 15 minutes
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: .  # This uploads your entire repo contents
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+      - name: 🔁 Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --cached --quiet || git commit -m "🔁 Auto-sync update"
+          git push
