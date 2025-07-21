@@ -1,13 +1,13 @@
 {
-  "timestamp": "2025-07-21T00:00:00Z",
-  "deribit": {
-    "momentum": "neutral"
-  },
-  "bridges": {
-    "status": "stable"
-  },
-  "wallets": {
-    "activity": "normal"
-  },
-  "deltaSignal": 0.00
+    "timestamp": "2025-07-21T04:57:52.950417Z",
+    "deribit": {
+        "momentum": "bullish"
+    },
+    "bridges": {
+        "status": "elevated"
+    },
+    "wallets": {
+        "activity": "spiking"
+    },
+    "deltaSignal": 0.15
 }
