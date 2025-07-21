@@ -3,94 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🧠 PhoenixNode Dashboard</title>
+  <title>PhoenixNode Live Feed</title>
   <style>
     body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0e1117;
-      color: #d1d5db;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
     }
-    header {
-      background-color: #1f2937;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #f472b6;
+    h1 {
+      color: #ff66c4;
     }
     .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      background-color: #1e293b;
-      border-radius: 10px;
+      background: #2a2a3c;
+      border-radius: 12px;
       padding: 1.5rem;
-      box-shadow: 0 0 10px #00000050;
+      box-shadow: 0 0 15px rgba(255,255,255,0.05);
     }
-    .section {
-      margin-bottom: 2rem;
-    }
-    h2 {
-      border-bottom: 2px solid #334155;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1rem;
-      color: #93c5fd;
-    }
-    .item {
-      margin-bottom: 1rem;
-      padding: 0.8rem;
-      background-color: #0f172a;
-      border-left: 4px solid #38bdf8;
+    .block {
+      background: #111827;
+      border-left: 6px solid #2563eb;
+      padding: 1rem;
+      margin: 0.5rem 0;
       border-radius: 6px;
     }
+    .safe { border-left-color: #10b981; }
+    .warn { border-left-color: #fbbf24; }
+    .alert { border-left-color: #ef4444; }
     .key {
-      font-weight: bold;
       color: #facc15;
+      font-weight: bold;
     }
-    .value {
-      margin-left: 0.5rem;
-    }
-    .footer {
-      text-align: center;
-      color: #64748b;
-      margin-top: 2rem;
+    .meta {
       font-size: 0.9rem;
+      color: #9ca3af;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>🧠 PhoenixNode Live Dashboard</header>
-  <div class="container" id="dashboard">
-    <div class="section">
-      <h2>Status Feed</h2>
-      <div class="item"><span class="key">Loading...</span></div>
-    </div>
-  </div>
-  <div class="footer">Autorefreshes every 15 seconds • GitHub Pages Powered</div>
+  <h1>🧠 PhoenixNode Live Feed</h1>
+  <div class="container" id="feed"></div>
+  <div class="meta">Autorefreshes every 15 seconds • GitHub Pages Powered</div>
 
   <script>
-    async function fetchData() {
-      try {
-        const res = await fetch('PhoenixNode_DashboardFeed.json');
-        const data = await res.json();
-        const container = document.getElementById('dashboard');
-        const section = container.querySelector('.section');
-        section.innerHTML = '<h2>Status Feed</h2>';
+    async function loadStatus() {
+      const res = await fetch('status.json');
+      const data = await res.json();
 
-        Object.entries(data).forEach(([key, value]) => {
-          if (typeof value === 'object') {
-            section.innerHTML += `<div class="item"><span class="key">${key}</span><div class="value">${JSON.stringify(value, null, 2)}</div></div>`;
-          } else {
-            section.innerHTML += `<div class="item"><span class="key">${key}:</span><span class="value">${value}</span></div>`;
-          }
-        });
-      } catch (err) {
-        document.getElementById('dashboard').innerHTML = '<div class="item">❌ Error loading dashboard data.</div>';
-      }
+      const container = document.getElementById('feed');
+      container.innerHTML = '';
+
+      const getClass = (value) => {
+        if (value < 0.1) return 'safe';
+        if (value < 0.5) return 'warn';
+        return 'alert';
+      };
+
+      container.innerHTML += `
+        <div class="block">
+          <span class="key">timestamp:</span> ${data.timestamp}
+        </div>
+        <div class="block"><span class="key">deribit</span><br>${JSON.stringify(data.deribit)}</div>
+        <div class="block"><span class="key">bridges</span><br>${JSON.stringify(data.bridges)}</div>
+        <div class="block"><span class="key">wallets</span><br>${JSON.stringify(data.wallets)}</div>
+        <div class="block ${getClass(data.deltaSignal)}">
+          <span class="key">deltaSignal:</span> ${data.deltaSignal}
+        </div>
+      `;
     }
 
-    fetchData();
-    setInterval(fetchData, 15000);
+    loadStatus();
+    setInterval(loadStatus, 15000);
   </script>
 </body>
 </html>
