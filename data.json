@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-07-21T00:00:00Z",
+  "deribit": {
+    "momentum": "neutral"
+  },
+  "bridges": {
+    "status": "stable"
+  },
+  "wallets": {
+    "activity": "normal"
+  },
+  "deltaSignal": 0.00
+}
