@@ -80,5 +80,7 @@ def push_to_github():
 if __name__ == "__main__":
     data = generate_data()
     update_json(data)
-    push_to_github()
-    print("✅ PhoenixNode_ExecutionEngine updated and synced.")
+    # Temporarily disabled Git sync due to Replit lock file protection
+    # push_to_github()
+    print("✅ PhoenixNode_ExecutionEngine updated locally.")
+    print("📝 Git sync temporarily disabled - data file updated successfully")
