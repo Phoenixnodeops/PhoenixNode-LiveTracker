@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PhoenixNode Live Dashboard</title>
+  <meta charset="UTF-8">
+  <script>
+    async function loadData() {
+      const res = await fetch('./PhoenixNode_DashboardFeed.json');
+      const data = await res.json();
+      document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+    }
+    window.onload = loadData;
+  </script>
+  <style>
+    body { font-family: monospace; background: #0d1117; color: #c9d1d9; padding: 20px; }
+    pre { background: #161b22; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🧠 PhoenixNode Live Feed</h1>
+  <pre id="output">Loading...</pre>
+</body>
+</html>
