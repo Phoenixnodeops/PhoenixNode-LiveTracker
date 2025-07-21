@@ -17,7 +17,7 @@ COMMIT_MESSAGE = "🔁 Auto-update: ExecutionEngine pushed new signal data"
 
 # --- Simulated AI Signal Engine ---
 def generate_data():
-    now = datetime.datetime.utcnow().isoformat() + "Z"
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
     return {
         "timestamp": now,
         "deribit": {"momentum": "bullish"},
