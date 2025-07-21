@@ -1,0 +1,33 @@
+name: PhoenixNode Auto-Update
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Runs every 15 minutes
+  workflow_dispatch:
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Generate updated dashboard feed
+        run: |
+          python update_dashboard.py
+
+      - name: Commit and push updates
+        run: |
+          git config user.name "phoenixnode-bot"
+          git config user.email "bot@phoenixnode.ai"
+          git add PhoenixNode_DashboardFeed.json
+          git commit -m "🔁 Auto-update DashboardFeed.json"
+          git push
