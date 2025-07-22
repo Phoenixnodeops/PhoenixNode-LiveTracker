@@ -12,20 +12,24 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Generate new status feed
-        run: |
-          echo "{
-            \"timestamp\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\",
-            \"deribit\": { \"momentum\": \"neutral\" },
-            \"bridges\": { \"status\": \"stable\" },
-            \"wallets\": { \"activity\": \"normal\" },
-            \"deltaSignal\": 0.02
-          }" > status.json
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-      - name: Commit and push
+      - name: Install dependencies (if needed)
+        run: |
+          pip install -r requirements.txt || true
+
+      - name: 🔁 Generate AI data & dashboard feed
+        run: |
+          python update_dashboard.py
+          python build_dashboard_data.py
+
+      - name: Commit & push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add status.json
-          git commit -m "⏱️ Update status feed"
+          git add data.json PhoenixNode_DashboardFeed.json
+          git commit -m "📊 Auto-update dashboard feed"
           git push
