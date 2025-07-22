@@ -1,9 +1,1 @@
-modules = ["web", "python-3.12"]
-run = "python PhoenixNode_ExecutionEngine.py"
-
-[nix]
-channel = "stable-24_05"
-packages = ["openssh"]
-
-[deployment]
-run = ["sh", "-c", "python PhoenixNode_ExecutionEngine.py"]
+run = "echo Manual only"
