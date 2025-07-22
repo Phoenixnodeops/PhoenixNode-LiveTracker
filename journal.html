@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📚 PhoenixNode Signal Journal</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #f0f6fc;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+    h1 {
+      color: #58a6ff;
+    }
+    .entry {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      padding: 15px;
+    }
+    .timestamp {
+      color: #8b949e;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .bullish { color: #39ff14; font-weight: bold; }
+    .bearish { color: #ff3131; font-weight: bold; }
+    .neutral { color: #cccccc; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>📚 PhoenixNode Signal Journal</h1>
+  <div id="log">Loading historical signals...</div>
+
+  <script>
+    async function loadJournal() {
+      const res = await fetch('signalHistory.json?_=' + new Date().getTime());
+      const history = await res.json();
+      const container = document.getElementById('log');
+      container.innerHTML = '';
+
+      history.reverse().forEach((entrySet, index) => {
+        for (const [asset, signal] of Object.entries(entrySet)) {
+          const div = document.createElement('div');
+          div.className = 'entry';
+          div.innerHTML = \`
+            <div class="timestamp">🕒 \${signal.timestamp}</div>
+            <strong>\${asset}</strong>: 
+            <span class="\${signal.signal}">\${signal.signal.toUpperCase()}</span><br>
+            <strong>Price:</strong> \$\${signal.price}<br>
+            <strong>Entry:</strong> \${signal.entry} &nbsp;&nbsp;
+            <strong>Exit:</strong> \${signal.exit}<br>
+            <strong>Forecast:</strong> \${signal.forecast}<br>
+            <strong>Confidence:</strong> \${Math.round(signal.confidence * 100)}%<br>
+            <strong>Influence:</strong> \${signal.institutional_influence}<br>
+            <strong>Reason:</strong> \${signal.expect}
+          \`;
+          container.appendChild(div);
+        }
+      });
+    }
+
+    loadJournal();
+  </script>
+</body>
+</html>
