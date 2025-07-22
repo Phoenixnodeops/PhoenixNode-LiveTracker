@@ -1,1 +1,2 @@
 run = "echo Manual only"
+modules = ["python-3.11"]

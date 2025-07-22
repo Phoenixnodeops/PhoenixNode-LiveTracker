@@ -1,9 +1,10 @@
 import subprocess
 import time
+import os  # Now used for env variable access
 
 # GitHub token + repo setup
 GITHUB_USER = "Phoenixnodeops"
-GITHUB_TOKEN = "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"
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # Secret from env
 REPO = "PhoenixNode-LiveTracker"
 BRANCH = "main"
 REPO_URL = f"https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/{GITHUB_USER}/{REPO}.git"
