@@ -33,3 +33,6 @@ jobs:
           git add data.json PhoenixNode_DashboardFeed.json
           git commit -m "📊 Auto-update dashboard feed"
           git push
+      - name: Log signals to history
+        run: |
+         python signalHistory.py
