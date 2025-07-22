@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🚀 Run PhoenixNode",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/PhoenixNode_ExecutionEngine.py",
+      "console": "integratedTerminal",
+      "postDebugTask": "log-signals"
+    }
+  ]
+}
