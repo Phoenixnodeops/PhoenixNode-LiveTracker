@@ -3,78 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PhoenixNode Live Feed</title>
+  <title>PhoenixNode Live Intelligence Matrix</title>
   <style>
     body {
-      background-color: #1e1e2f;
-      color: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 2rem;
+      background-color: #0d1117;
+      color: #f0f6fc;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
     }
     h1 {
-      color: #ff66c4;
+      color: #58a6ff;
     }
-    .container {
-      background: #2a2a3c;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 0 15px rgba(255,255,255,0.05);
+    .box {
+      background: #161b22;
+      padding: 15px;
+      border: 1px solid #30363d;
+      margin-bottom: 15px;
+      border-radius: 5px;
     }
-    .block {
-      background: #111827;
-      border-left: 6px solid #2563eb;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      border-radius: 6px;
-    }
-    .safe { border-left-color: #10b981; }
-    .warn { border-left-color: #fbbf24; }
-    .alert { border-left-color: #ef4444; }
-    .key {
-      color: #facc15;
+    .bullish {
+      color: #39ff14;
       font-weight: bold;
     }
-    .meta {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      margin-top: 1rem;
+    .bearish {
+      color: #ff3131;
+      font-weight: bold;
+    }
+    .neutral {
+      color: #cccccc;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>🧠 PhoenixNode Live Feed</h1>
-  <div class="container" id="feed"></div>
-  <div class="meta">Autorefreshes every 15 seconds • GitHub Pages Powered</div>
+  <h1>📡 PhoenixNode — AI Market Intelligence</h1>
+  <div id="output">Loading institutional signals...</div>
 
   <script>
-    async function loadStatus() {
-      const res = await fetch('data.json');
+    async function fetchData() {
+      const res = await fetch('data.json?_=' + new Date().getTime()); // bust cache
       const data = await res.json();
-
-      const container = document.getElementById('feed');
+      const container = document.getElementById('output');
       container.innerHTML = '';
 
-      const getClass = (value) => {
-        if (value < 0.1) return 'safe';
-        if (value < 0.5) return 'warn';
-        return 'alert';
-      };
+      for (const [key, value] of Object.entries(data)) {
+        if (key === 'timestamp') continue;
 
-      container.innerHTML += `
-        <div class="block">
-          <span class="key">timestamp:</span> ${data.timestamp}
-        </div>
-        <div class="block"><span class="key">deribit</span><br>${JSON.stringify(data.deribit)}</div>
-        <div class="block"><span class="key">bridges</span><br>${JSON.stringify(data.bridges)}</div>
-        <div class="block"><span class="key">wallets</span><br>${JSON.stringify(data.wallets)}</div>
-        <div class="block ${getClass(data.deltaSignal)}">
-          <span class="key">deltaSignal:</span> ${data.deltaSignal}
-        </div>
-      `;
+        const div = document.createElement('div');
+        div.className = 'box';
+        div.innerHTML = `
+          <strong>${key}</strong>: 
+          <span class="${value.signal}">${value.signal.toUpperCase()}</span><br>
+          <strong>Price:</strong> $${value.price}<br>
+          <strong>Entry:</strong> ${value.entry} &nbsp;&nbsp; 
+          <strong>Exit:</strong> ${value.exit}<br>
+          <strong>Forecast:</strong> ${value.forecast}<br>
+          <strong>Confidence:</strong> ${Math.round(value.confidence * 100)}%<br>
+          <strong>Influence:</strong> ${value.institutional_influence}<br>
+          <strong>Reason:</strong> ${value.expect}
+        `;
+        container.appendChild(div);
+      }
     }
 
-    loadStatus();
-    setInterval(loadStatus, 15000);
+    fetchData();
+    setInterval(fetchData, 10000);
   </script>
 </body>
 </html>
