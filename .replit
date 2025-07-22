@@ -1,2 +1,5 @@
-run = "echo Manual only"
-modules = ["python-3.11"]
+run = "python3 PhoenixNode_ExecutionEngine.py"
+modules = ["python-3.12", "web"]
+
+[nix]
+channel = "stable-24_05"

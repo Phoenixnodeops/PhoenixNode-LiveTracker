@@ -1,13 +1,6 @@
 import subprocess
 import time
-import os  # Now used for env variable access
-
-# GitHub token + repo setup
-GITHUB_USER = "Phoenixnodeops"
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # Secret from env
-REPO = "PhoenixNode-LiveTracker"
-BRANCH = "main"
-REPO_URL = f"https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/{GITHUB_USER}/{REPO}.git"
+import os
 
 def run(cmd):
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
@@ -17,18 +10,20 @@ def run(cmd):
         print(result.stderr)
 
 def auto_push():
-    while True:
-        print("🔁 Checking for changes...")
+    git_url = os.getenv("GIT_URL")
+    if not git_url:
+        print("❌ GIT_URL not found in secrets.")
+        return
 
-        run("git config --global user.name 'PhoenixNodeOps'")
-        run("git config --global user.email 'trunks051630@protonmail.com'")
-        run(f"git remote set-url origin {REPO_URL}")
-        run("git add .")
-        run("git commit -m '🤖 Auto-push: New data update' || echo '⚠️ No changes to commit'")
-        run("git push origin main --force")
+    run("git config --global user.name 'PhoenixNodeOps'")
+    run("git config --global user.email 'trunks051630@protonmail.com'")
+    run("git add .")
+    run("git commit -m '🤖 Auto-push: New data update' || echo '⚠️ No changes to commit'")
+    run(f"git push {git_url} HEAD:main --force")
 
-        print("✅ Push complete. Sleeping 60s...")
-        time.sleep(60)
+    print("✅ Auto-push complete. Waiting 60 seconds...")
 
 if __name__ == "__main__":
-    auto_push()
+    while True:
+        auto_push()
+        time.sleep(60)
