@@ -19,7 +19,7 @@ def auto_push():
     run("git config --global user.email 'trunks051630@protonmail.com'")
     run("git add .")
     run("git commit -m '🤖 Auto-push: New data update' || echo '⚠️ No changes to commit'")
-    run(f"git push {git_url} HEAD:main --force")
+    run(f"git push {git_url} main --force")
 
     print("✅ Auto-push complete. Waiting 60 seconds...")
 
